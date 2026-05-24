@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}About This System{% endblock %}
+
+{% block content %}
+    <h2>About the Tracker Project</h2>
+    <p>This mini-project fulfills the <strong>Part 2: Templating Engine Implementation</strong> rules.</p>
+    
+    <p>It explicitly demonstrates how a backend server feeds context packages to decoupled frontend layouts.</p>
+    
+    <div style="background-color: #eff6ff; padding: 15px; border-left: 4px solid #3b82f6; border-radius: 4px;">
+        <h4>System Specs:</h4>
+        <ul>
+            <li>Django Engine Version: {{ platform_specs.django_version|floatformat:1 }}</li>
+            <li>Environment Type: {{ platform_specs.environment|upper }}</li>
+        </ul>
+    </div>
+{% endblock %}

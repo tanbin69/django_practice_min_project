@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - {{ user_profile.name|title }}{% endblock %}
+
+{% block content %}
+    <h2>Welcome to your Tracker, {{ user_profile.name|title }}!</h2>
+    <p>Role: <strong>{{ user_profile.role }}</strong> | System Status: Active</p>
+    <p>Today's Date: <em>{{ current_date|date:"F d, Y" }}</em></p>
+    
+    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+
+    <h3>Your Active Task Log</h3>
+    
+    <ul style="list-style: none; padding: 0;">
+    {% for task in task_list %}
+        <li class="task-item {% if task.priority == 'High' %}border-high{% elif task.priority == 'Medium' %}border-med{% else %}border-low{% endif %}" 
+            style="padding: 12px; margin-bottom: 8px; background: #f8fafc; border-radius: 0 4px 4px 0; border-left: 5px solid #ccc;">
+            
+            <strong>[{{ task.priority }}]</strong> {{ task.title }} 
+            
+            {% if task.is_completed %}
+                <span style="color: green; font-size: 0.85em; font-weight: bold; margin-left: 10px;">✓ Complete</span>
+            {% else %}
+                <span style="color: #64748b; font-size: 0.85em; font-style: italic; margin-left: 10px;">(Pending)</span>
+            {% endif %}
+        </li>
+    {% empty %}
+        <p>No internship tasks logged yet.</p>
+    {% endfor %}
+    </ul>
+
+    <style>
+        .border-high { border-left-color: #ef4444 !important; }
+        .border-med { border-left-color: #f59e0b !important; }
+        .border-low { border-left-color: #10b981 !important; }
+    </style>
+
+{% endblock %}
