@@ -1,14 +1,20 @@
 from django.shortcuts import render
 from datetime import datetime
+from .models import Task
 
 def home_view(request):
-    # Dummy mock database objects to pass to templates
-    mock_tasks = [
-        {'title': 'Configure Django TEMPLATES directory path settings', 'priority': 'High', 'is_completed': True},
-        {'title': 'Fix Git Bash path environmental variables crash', 'priority': 'High', 'is_completed': True},
-        {'title': 'Build out template inheritance structures', 'priority': 'Medium', 'is_completed': False},
-        {'title': 'Connect dynamic SQLite Database layer models', 'priority': 'Low', 'is_completed': False},
-    ]
+    # 1. Pull ALL tasks directly out of your SQLite Database
+    database_tasks = Task.objects.all().order_by('-created_at')
+    
+    context = {
+        'user_profile': {
+            'name': 'tanbin',
+            'role': 'Backend Engineering Intern',
+        },
+        'current_date': datetime.now(),
+        'task_list': database_tasks, 
+    }
+    return render(request, 'home.html', context)
     
     context = {
         'user_profile': {
