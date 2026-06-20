@@ -9,30 +9,58 @@
     
     <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
 
+    <div style="background: #f1f5f9; padding: 20px; border-radius: 6px; margin-bottom: 25px;">
+        <h4 style="margin-top: 0;">➕ Log New Internship Task</h4>
+        <form method="POST" action="">
+            {% csrf_token %} <div style="margin-bottom: 10px;">
+                <input type="text" name="title" placeholder="What are you working on?" required 
+                       style="width: 100%; padding: 8px; box-sizing: border-box;">
+            </div>
+            
+            <div style="margin-bottom: 10px;">
+                <select name="priority" style="padding: 8px; width: 100%;">
+                    <option value="High">🔴 High Priority</option>
+                    <option value="Medium" selected>🟡 Medium Priority</option>
+                    <option value="Low">🟢 Low Priority</option>
+                </select>
+            </div>
+            
+            <button type="submit" style="background: #1e293b; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer;">Save Task</button>
+        </form>
+    </div>
+
     <h3>Your Active Task Log</h3>
     
     <ul style="list-style: none; padding: 0;">
     {% for task in task_list %}
-        <li class="task-item {% if task.priority == 'High' %}border-high{% elif task.priority == 'Medium' %}border-med{% else %}border-low{% endif %}" 
-            style="padding: 12px; margin-bottom: 8px; background: #f8fafc; border-radius: 0 4px 4px 0; border-left: 5px solid #ccc;">
+        <li class="task-item {% if task.is_completed %}task-done{% else %}task-pending{% endif %} {% if task.priority == 'High' %}border-high{% elif task.priority == 'Medium' %}border-med{% else %}border-low{% endif %}" 
+            style="padding: 15px; margin-bottom: 8px; border-radius: 0 4px 4px 0; border-left: 5px solid #ccc; display: flex; justify-content: space-between; align-items: center;">
             
-            <strong>[{{ task.priority }}]</strong> {{ task.title }} 
-            
-            {% if task.is_completed %}
-                <span style="color: green; font-size: 0.85em; font-weight: bold; margin-left: 10px;">✓ Complete</span>
-            {% else %}
-                <span style="color: #64748b; font-size: 0.85em; font-style: italic; margin-left: 10px;">(Pending)</span>
-            {% endif %}
+            <div>
+                <span class="{% if task.is_completed %}completed-text{% endif %}">
+                    <strong>[{{ task.priority }}]</strong> {{ task.title }}
+                </span>
+            </div>
+
+            <div>
+                {% if not task.is_completed %}
+                    <a href="{% url 'complete_task_route' task.id %}" style="background: #3b82f6; color: white; text-decoration: none; padding: 5px 10px; border-radius: 4px; font-size: 0.85em; margin-right: 5px;">Complete</a>
+                {% endif %}
+                <a href="{% url 'delete_task_route' task.id %}" style="background: #ef4444; color: white; text-decoration: none; padding: 5px 10px; border-radius: 4px; font-size: 0.85em;">Delete</a>
+            </div>
         </li>
     {% empty %}
-        <p>No internship tasks logged yet.</p>
+        <p style="color: #64748b; font-style: italic;">No internship tasks logged yet. Create one above!</p>
     {% endfor %}
     </ul>
 
     <style>
+        .task-done { background-color: #f1f5f9; }
+        .task-pending { background-color: #f8fafc; }
+        .completed-text { text-decoration: line-through; color: #94a3b8; }
+        
         .border-high { border-left-color: #ef4444 !important; }
         .border-med { border-left-color: #f59e0b !important; }
         .border-low { border-left-color: #10b981 !important; }
     </style>
-
 {% endblock %}
