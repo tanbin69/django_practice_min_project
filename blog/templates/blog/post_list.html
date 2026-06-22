@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BAIUST Computer Club Blog</title>
+</head>
+<body style="font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px;">
+
+    <h2>Computer Club Blog Posts</h2>
+    <hr>
+
+    {% for post in posts %}
+        <div style="margin-bottom: 30px; background: #f8fafc; padding: 20px; border-radius: 6px;">
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.content }}</p>
+            {% if post.published_date %}
+                <small style="color: #64748b;">Published: {{ post.published_date }}</small>
+            {% else %}
+                <small style="color: #94a3b8; font-style: italic;">Draft Mode</small>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>No blog posts available yet!</p>
+    {% endfor %}
+
+</body>
+</html>
